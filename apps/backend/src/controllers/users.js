@@ -1,5 +1,6 @@
 import pool from "../db/pool.js";
 import bcrypt from "bcrypt";
+import jsonwebtoken from "jsonwebtoken";
 export async function getAllUsers(req, res) {
   const query = "SELECT * FROM USERS";
   const result = await pool.query(query);
@@ -25,6 +26,7 @@ export async function authUser(req, res) {
 export async function userLogin(req, res) {
   const username = req.body.username;
   const password = req.body.password;
+  const user = { username };
   const query = "SELECT * FROM USERS WHERE username = $1";
   const result = await pool.query(query, [username]);
   console.log(result.rows);
@@ -33,9 +35,25 @@ export async function userLogin(req, res) {
     console.log(dbPassword);
     const match = await bcrypt.compare(password, dbPassword);
     if (match) {
-      res.status(200).send("User successfully logged in");
+      const accessToken = jsonwebtoken.sign(
+        user,
+        process.env.ACCESS_TOKEN_SECRET
+      );
+      res.json({ message: "Logged in", accessToken: accessToken });
     } else {
       res.status(403).send("Wrong password");
     }
   }
+}
+
+export function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) return res.sendStatus(401);
+
+  jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
 }
