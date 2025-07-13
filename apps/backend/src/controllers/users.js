@@ -54,14 +54,25 @@ export async function userLogin(req, res) {
 }
 
 export function authenticateToken(req, res, next) {
-  /* const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  console.log("checking if cookie is valid!");
+  const token = req.cookies.access_token;
   if (token == null) return res.sendStatus(401);
 
   jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
     req.user = user;
     next();
-  }); */
+  });
+}
+
+export function checkCurrentLoggedInUser(req, res) {
   const token = req.cookies.access_token;
+  if (token == null) return res.sendStatus(401);
+
+  try {
+    const data = jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    res.status(200).json({ message: "Session gültig", user: data });
+  } catch (err) {
+    res.status(403).json({ message: "Token ungültig oder abgelaufen" });
+  }
 }

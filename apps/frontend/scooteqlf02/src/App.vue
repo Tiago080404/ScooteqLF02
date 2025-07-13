@@ -22,8 +22,28 @@ export default {
     authTry() {
       this.isAuthenticated = !this.isAuthenticated;
     },
+    async checkAuthentication() {
+      try {
+        const response = await fetch("http://localhost:8080/auth", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        console.log(data);
+        if (data !== null) {
+          this.isAuthenticated = true;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
-  created() {},
+  created() {
+    this.checkAuthentication();
+  },
 };
 </script>
 <template>

@@ -6,17 +6,19 @@ export default{
   methods:{
    async reportScooter(){
     try{
-        const response = await fetch("http://localhost:8080/",{
+        const response = await fetch("http://localhost:8080/scooter",{
           method:"PATCH",
           credentials:"include",
            headers: {
            "Content-Type": "application/json",
-  },
+          },
           body: JSON.stringify({
             id:2,
 	          status:"reported"
           })
-        })      
+        })  
+        const data = await response.json();
+        console.log(data);
     }catch(err){
       console.log(err)
     }

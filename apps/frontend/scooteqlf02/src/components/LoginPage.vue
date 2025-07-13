@@ -12,7 +12,7 @@ export default {
         console.log("hjfds");
         const response = await fetch("http://localhost:8080/login", {
           method: "POST",
-          //credentials: "include",
+          credentials: "include",
           headers: {
             "Content-type": "application/json",
           },
