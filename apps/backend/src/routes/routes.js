@@ -4,7 +4,7 @@ import {
   userLogin,
   checkCurrentLoggedInUser,
 } from "../controllers/users.js";
-import { changeStatus } from "../controllers/scooters.js";
+import { changeStatus, getAllScooters } from "../controllers/scooters.js";
 import express from "express";
 
 const router = express.Router();
@@ -12,6 +12,8 @@ const router = express.Router();
 //get everthing
 router.get("/", getAllUsers);
 
+//scooters
+router.get("/scooter", getAllScooters);
 router.patch("/scooter", changeStatus);
 
 //users

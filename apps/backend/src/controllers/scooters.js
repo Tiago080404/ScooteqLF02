@@ -8,3 +8,8 @@ export async function changeStatus(req, res) {
   const result = await pool.query(query, values);
   res.send(result.rows);
 }
+export async function getAllScooters(req, res) {
+  const query = "SELECT * FROM scooters";
+  const result = await pool.query(query);
+  res.send(result.rows);
+}
