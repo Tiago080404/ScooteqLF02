@@ -39,7 +39,14 @@ export async function userLogin(req, res) {
         user,
         process.env.ACCESS_TOKEN_SECRET
       );
-      res.json({ message: "Logged in", accessToken: accessToken });
+      res.cookie("access_token", accessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "Lax",
+        maxAge: 3600000,
+      });
+
+      res.json({ message: "Logged in" });
     } else {
       res.status(403).send("Wrong password");
     }
@@ -47,7 +54,7 @@ export async function userLogin(req, res) {
 }
 
 export function authenticateToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
+  /* const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (token == null) return res.sendStatus(401);
 
@@ -55,5 +62,6 @@ export function authenticateToken(req, res, next) {
     if (err) return res.sendStatus(403);
     req.user = user;
     next();
-  });
+  }); */
+  const token = req.cookies.access_token;
 }

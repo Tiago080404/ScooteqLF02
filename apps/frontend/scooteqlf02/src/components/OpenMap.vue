@@ -16,6 +16,7 @@ export default {
         L.marker([lat, lng])
           .addTo(this.map)
           .bindPopup("Hier steht ein Scooter");
+        this.$emit("addScooter");
       });
     },
   },
