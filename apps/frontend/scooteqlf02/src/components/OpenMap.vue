@@ -13,7 +13,8 @@ export default {
       scootersLocation: [],
       openItem: false,
       scooterId:0,
-      scooterDescription:""
+      scooterDescription:"",
+      scooterReported:false
     };
   },
   methods: {
@@ -45,6 +46,7 @@ export default {
       this.openItem = false
     },
    async reportBrokenScooter(){
+    try{
       const response = await fetch("http://localhost:8080/scooter",{
         method:"PATCH",
         credentials:"include",
@@ -59,6 +61,11 @@ export default {
       })
       const data = await response.json()
       console.log("reported scooter",data)
+      this.scooterReported=true
+    }catch(err){
+      console.log(err)
+    }
+      
     }
   },
 
@@ -131,6 +138,7 @@ export default {
                 @click="this.reportBrokenScooter()"
                 >Report broken Scooter</button
               >
+              <p style="color: green;" v-if="this.scooterReported">Scooter reported!</p>
             </div>
         </div>
       </div>
