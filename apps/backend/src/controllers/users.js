@@ -30,6 +30,7 @@ export async function userLogin(req, res) {
   const query = "SELECT * FROM USERS WHERE username = $1";
   const result = await pool.query(query, [username]);
   console.log(result.rows);
+  user["role"] = result.rows[0].role;
   if (result.rows) {
     const dbPassword = result.rows[0].password;
     console.log(dbPassword);
@@ -46,7 +47,7 @@ export async function userLogin(req, res) {
         maxAge: 3600000,
       });
 
-      res.json({ message: "Logged in" });
+      res.json({ message: "Logged in", user: user });
     } else {
       res.status(403).send("Wrong password");
     }

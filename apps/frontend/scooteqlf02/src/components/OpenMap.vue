@@ -66,6 +66,41 @@ export default {
       console.log(err)
     }
       
+    },
+    async reportFixedScooter(){
+      const response = await fetch("http://localhost:8080/scooter",{
+        method:"PATCH",
+        credentials:"include",
+         headers: {
+          "Content-Type": "application/json",
+        },
+        body:JSON.stringify({
+          id:this.scooterId,
+          description:"all good",
+          status:"done"
+        })
+      })
+      const data = await response.json()
+      console.log("reported ",data)
+      this.scooterReported=true
+
+    },
+    async takeReportedScooter(){
+      const response = await fetch("http://localhost:8080/scooter",{
+        method:"PATCH",
+        credentials:"include",
+         headers: {
+          "Content-Type": "application/json",
+        },
+        body:JSON.stringify({
+          id:this.scooterId,
+          description:"Fixing this Problem",
+          status:"doing"
+        })
+      })
+      const data = await response.json()
+      this.scooterReported=true
+
     }
   },
 
@@ -134,11 +169,13 @@ export default {
                 v-model="this.scooterDescription"
               ></input>
 
-              <button
+              <button style="background-color: red;border-radius: 8px"
                 @click="this.reportBrokenScooter()"
                 >Report broken Scooter</button
               >
               <p style="color: green;" v-if="this.scooterReported">Scooter reported!</p>
+              <button v-if="$auth.isTechnician" @click="this.reportFixedScooter()" style="background-color: greenyellow; border-radius: 8px;">Fixed</button>
+              <button v-if="$auth.isTechnician" @click="this.takeReportedScooter()" style="background-color: greenyellow; border-radius: 8px;">Take Scooter</button>
             </div>
         </div>
       </div>

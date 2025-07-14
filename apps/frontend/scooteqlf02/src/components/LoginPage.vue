@@ -22,7 +22,13 @@ export default {
           }),
         });
         const data = await response.json();
-        console.log(data);
+        console.log("data", data);
+        if (data.user) {
+          localStorage.setItem("user", JSON.stringify(data.user));
+          this.$emit("authenticated");
+        } else {
+          console.error("Login response missing user data");
+        }
         this.$emit("authenticated");
       } catch (err) {
         console.log(err);

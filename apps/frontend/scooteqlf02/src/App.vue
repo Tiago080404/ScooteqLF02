@@ -20,7 +20,8 @@ export default {
       this.openModal = !this.openModal;
     },
     authTry() {
-      this.isAuthenticated = !this.isAuthenticated;
+      console.log("loading data...");
+      this.isAuthenticated = true;
     },
     async checkAuthentication() {
       try {
@@ -50,6 +51,7 @@ export default {
   <div v-if="this.isAuthenticated">
     <OpenMap @addScooter="callInputMask"></OpenMap>
     <AddScooterInput v-if="openModal" @close="callInputMask"></AddScooterInput>
+    <p v-if="$auth.isTechnician">fkjd</p>
   </div>
   <div v-else><LoginPage @authenticated="authTry"></LoginPage></div>
 </template>
