@@ -56,7 +56,7 @@ export default{
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 .first-modal {
   position: fixed;
   z-index: 9998;

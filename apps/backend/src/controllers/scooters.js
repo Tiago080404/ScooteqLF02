@@ -2,9 +2,10 @@ import pool from "../db/pool.js";
 
 export async function changeStatus(req, res) {
   console.log(req.body);
-  const { status, id } = req.body;
-  const query = "UPDATE scooters SET status = $1 WHERE id = $2 RETURNING *";
-  const values = [status, id];
+  const { status, id, description } = req.body;
+  const query =
+    "UPDATE scooters SET status = $1,description = $2 WHERE id = $3 RETURNING *";
+  const values = [status, description, id];
   const result = await pool.query(query, values);
   res.send(result.rows);
 }
