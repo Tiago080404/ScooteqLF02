@@ -48,12 +48,73 @@ export default {
 };
 </script>
 <template>
-  <div v-if="this.isAuthenticated">
-    <p v-if="$auth.isTechnician">
-      WELCOME {{ $auth.user.username.toUpperCase() }}
-    </p>
-    <OpenMap @addScooter="callInputMask"></OpenMap>
-    <AddScooterInput v-if="openModal" @close="callInputMask"></AddScooterInput>
+  <div class="app-container" v-if="this.isAuthenticated">
+    <aside class="sidebar">
+      <h2 class="sidebar-title">👷 TECH DASH</h2>
+      <nav>
+        <ul class="nav-list">
+          <li>🏠 Dashboard</li>
+          <li>🗺️ Map</li>
+          <li>🛴 Scooters</li>
+          <li>⚙️ Settings</li>
+        </ul>
+      </nav>
+      <p class="welcome-text">
+        Willkommen, {{ $auth.user.username.toUpperCase() }}
+      </p>
+    </aside>
+
+    <main class="main-content">
+      <OpenMap @addScooter="callInputMask" />
+      <AddScooterInput v-if="openModal" @close="callInputMask" />
+    </main>
   </div>
-  <div v-else><LoginPage @authenticated="authTry"></LoginPage></div>
+  <div v-else>
+    <LoginPage @authenticated="authTry" />
+  </div>
 </template>
+<style scoped>
+.app-container {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+.sidebar {
+  width: 200px;
+  background-color: grey;
+  color: #ffff;
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+.sidebar-title {
+  margin-bottom: 30px;
+  font-size: 20px;
+}
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.nav-list li {
+  padding: 10px 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.nav-list li:hover {
+  color: blue;
+}
+.welcome-text {
+  margin-top: 30px;
+  font-size: 14px;
+  color: #bbbbbb;
+}
+.main-content {
+  flex: 1;
+  padding: -18px;
+  background-color: #f4f4f4;
+  overflow-y: auto;
+}
+</style>

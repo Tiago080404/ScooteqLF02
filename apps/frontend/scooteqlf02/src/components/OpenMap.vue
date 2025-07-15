@@ -121,7 +121,7 @@ export default {
     
     
     await this.getAllScooters();
-    this.map = L.map("map").setView([52.52, 13.405], 13);
+    this.map = L.map("map").setView([53.5511, 9.9937], 13);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap contributors",
@@ -149,7 +149,7 @@ export default {
 };
 </script>
 <template>
-  <div id="map" style="height: 400px; width: 600px"></div>
+  <div id="map" style="height: 100%; width: 100%"></div>
    <div class="first-modal" v-if="this.openItem">
     <div class="second-modal">
       <div class="third-modal">
