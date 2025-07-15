@@ -12,6 +12,7 @@ export default {
       isAuthenticated: !!user,
       isAdmin: user?.role === "Admin",
       isTechnician: user?.role === "Techniker",
+      isViewer: user?.role === "Viewer",
       logout() {
         localStorage.removeItem("user");
         window.location.reload();

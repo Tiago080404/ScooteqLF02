@@ -26,6 +26,7 @@ export default {
         if (data.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
           this.$emit("authenticated");
+          window.location.reload(); //
         } else {
           console.error("Login response missing user data");
         }

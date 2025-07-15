@@ -49,9 +49,11 @@ export default {
 </script>
 <template>
   <div v-if="this.isAuthenticated">
+    <p v-if="$auth.isTechnician">
+      WELCOME {{ $auth.user.username.toUpperCase() }}
+    </p>
     <OpenMap @addScooter="callInputMask"></OpenMap>
     <AddScooterInput v-if="openModal" @close="callInputMask"></AddScooterInput>
-    <p v-if="$auth.isTechnician">fkjd</p>
   </div>
   <div v-else><LoginPage @authenticated="authTry"></LoginPage></div>
 </template>

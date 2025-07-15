@@ -140,9 +140,9 @@ export default {
         `;
       marker.bindPopup(popupContent);
     }
-    L.marker([52.52, 13.405])
+   /*  L.marker([52.52, 13.405])
       .addTo(this.map)
-      .bindPopup("Hier steht ein Scooter");
+      .bindPopup("Hier steht ein Scooter"); */
 
       this.addNewMarker();
   },
