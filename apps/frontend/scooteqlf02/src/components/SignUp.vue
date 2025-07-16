@@ -1,7 +1,13 @@
 <script>
 export default {
+  data() {
+    return {
+      signUp: false,
+    };
+  },
   methods: {
     handleSignUp() {
+      this.signUp = true;
       console.log("Sign Up button clicked");
     },
   },
