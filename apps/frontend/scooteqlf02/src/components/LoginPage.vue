@@ -1,20 +1,18 @@
 <script>
-import SignUp from "./SignUp.vue";
 export default {
-  components: {
-    SignUp,
-  },
   data() {
     return {
       username: "",
       password: "",
-      wrongCred: false,
+      wrongCred: false, // Error state for login
+      signUp: false, // Toggles between Login and Sign Up view
+      signupError: "", // Error state for sign up
     };
   },
   methods: {
     async login() {
       try {
-        console.log("hjfds");
+        console.log("Attempting login...");
         const response = await fetch("http://localhost:8080/login", {
           method: "POST",
           credentials: "include",
@@ -27,74 +25,165 @@ export default {
           }),
         });
         const data = await response.json();
-        console.log("data", data);
         if (data.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
           this.$emit("authenticated");
-          window.location.reload(); //
+          window.location.reload();
         } else {
           console.error("Login response missing user data");
           this.wrongCred = true;
         }
-        this.$emit("authenticated");
       } catch (err) {
         console.log(err);
         this.wrongCred = true;
       }
     },
+    async register() {
+      this.signupError = "";
+      if (this.password.length < 6) {
+        this.signupError = "Password must be at least 6 characters long.";
+        return;
+      }
+      try {
+        const response = await fetch("http://localhost:8080/auth", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            username: this.username,
+            password: this.password,
+            role: "user",
+          }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert("Registration successful! Please log in.");
+          this.signUp = false;
+          this.username = "";
+          this.password = "";
+          this.wrongCred = false;
+        } else {
+          this.signupError =
+            data.message || "Registration failed. Please try again.";
+        }
+      } catch (err) {
+        console.log(err);
+        this.signupError = "An error occurred. Please check your connection.";
+      }
+    },
   },
 };
 </script>
+
 <template>
   <div class="login-container">
     <div class="login-card">
-      <div class="card-header">
-        <h1>Welcome Back</h1>
-        <p>Enter your credentials to access your account</p>
+      <div v-if="!signUp">
+        <div class="card-header">
+          <h1>Welcome Back to ScooTec</h1>
+          <h4>The future of scooter sharing</h4>
+          <p>Enter your credentials to access your account</p>
+        </div>
+
+        <form @submit.prevent="login">
+          <div class="input-group">
+            <i class="fa-solid fa-user icon"></i>
+            <input
+              type="text"
+              placeholder="Username"
+              v-model="username"
+              class="input-field"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <i class="fa-solid fa-lock icon"></i>
+            <input
+              type="password"
+              placeholder="Password"
+              v-model="password"
+              class="input-field"
+              required
+            />
+          </div>
+
+          <Transition name="fade">
+            <p v-if="wrongCred" class="error-message">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              Invalid username or password.
+            </p>
+          </Transition>
+
+          <div class="actions">
+            <a href="#" class="forgot-password">Forgot Password?</a>
+          </div>
+
+          <button type="submit" class="btn primary-btn">Login</button>
+        </form>
+
+        <div class="card-footer">
+          <p>
+            Don't have an account?
+            <a href="#" @click.prevent="signUp = true">Sign Up</a>
+          </p>
+        </div>
       </div>
 
-      <form @submit.prevent="login">
-        <div class="input-group">
-          <i class="fa-solid fa-user icon"></i>
-          <input
-            type="text"
-            placeholder="Username"
-            v-model="username"
-            class="input-field"
-            required
-          />
+      <div v-else>
+        <div class="card-header">
+          <h1>Create an Account</h1>
+          <h4>Join ScooTec today!</h4>
+          <p>Please fill in the details to register</p>
         </div>
 
-        <div class="input-group">
-          <i class="fa-solid fa-lock icon"></i>
-          <input
-            type="password"
-            placeholder="Password"
-            v-model="password"
-            class="input-field"
-            required
-          />
-        </div>
+        <form @submit.prevent="register">
+          <div class="input-group">
+            <i class="fa-solid fa-user icon"></i>
+            <input
+              type="text"
+              placeholder="Username"
+              v-model="username"
+              class="input-field"
+              required
+            />
+          </div>
 
-        <Transition name="fade">
-          <p v-if="wrongCred" class="error-message">
-            <i class="fa-solid fa-circle-exclamation"></i>
-            Invalid username or password.
+          <div class="input-group">
+            <i class="fa-solid fa-lock icon"></i>
+            <input
+              type="password"
+              placeholder="Password"
+              v-model="password"
+              class="input-field"
+              required
+            />
+          </div>
+
+          <Transition name="fade">
+            <p v-if="signupError" class="error-message">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ signupError }}
+            </p>
+          </Transition>
+
+          <button
+            type="submit"
+            class="btn primary-btn"
+            style="margin-top: 25px"
+            @click="register"
+          >
+            Register
+          </button>
+        </form>
+
+        <div class="card-footer">
+          <p>
+            Already have an account?
+            <a href="#" @click.prevent="signUp = false">Login</a>
           </p>
-        </Transition>
-
-        <div class="actions">
-          <a href="#" class="forgot-password">Forgot Password?</a>
         </div>
-
-        <button type="submit" class="btn primary-btn">Login</button>
-      </form>
-
-      <div class="card-footer">
-        <p>
-          Don't have an account?
-          <a href="#" @click.prevent="showSignUp">Sign Up</a>
-        </p>
       </div>
     </div>
   </div>
@@ -149,8 +238,14 @@ export default {
   font-weight: 700;
 }
 
+.card-header h4 {
+  margin: 0;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+}
+
 .card-header p {
-  margin: 0 0 35px 0;
+  margin: 10px 0 35px 0;
   font-size: 1em;
   font-weight: 300;
   opacity: 0.9;
@@ -172,7 +267,7 @@ export default {
 
 .input-field {
   width: 100%;
-
+  padding: 15px 20px 15px 45px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 10px;
   font-size: 1em;
