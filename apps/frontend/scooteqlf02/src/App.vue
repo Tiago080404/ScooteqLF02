@@ -19,6 +19,11 @@ export default {
     callInputMask() {
       this.openModal = !this.openModal;
     },
+    logout() {
+      this.isAuthenticated = false;
+      this.$auth.logout();
+      this.openModal = false;
+    },
     authTry() {
       console.log("loading data...");
       this.isAuthenticated = true;
@@ -57,10 +62,11 @@ export default {
           <li>🗺️ Map</li>
           <li>🛴 Scooters</li>
           <li>⚙️ Settings</li>
+          <li @click="logout">🔒 Logout</li>
         </ul>
       </nav>
       <p class="welcome-text">
-        Willkommen, {{ $auth.user.username.toUpperCase() }}
+        Welcome, {{ $auth.user.username.toUpperCase() }}
       </p>
     </aside>
 
