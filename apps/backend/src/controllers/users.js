@@ -15,11 +15,15 @@ export async function authUser(req, res) {
   const b = await bcrypt.hash(password, saltRounds);
   console.log(b);
   const query = "INSERT INTO USERS (username,password,role) VALUES ($1,$2,$3)";
-  const result = await pool.query(query, [username, b, role]);
-  console.log("hallo");
-  console.log(result);
-  if (result.rows) {
-    res.send("User authenticated");
+
+  try {
+    const result = await pool.query(query, [username, b, role]);
+    console.log("hallo");
+    console.log(result);
+    res.status(200).json({ message: "User authenticated" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Database error", error: err.message });
   }
 }
 

@@ -53,7 +53,7 @@ export default {
           body: JSON.stringify({
             username: this.username,
             password: this.password,
-            role: "user",
+            role: "Viewer",
           }),
         });
         const data = await response.json();

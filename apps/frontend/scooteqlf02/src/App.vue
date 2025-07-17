@@ -63,6 +63,7 @@ export default {
           <li>🛴 Scooters</li>
           <li>⚙️ Settings</li>
           <li @click="logout">🔒 Logout</li>
+          <li v-if="$auth.user.role === 'Admin'">⚙️ Admin Settings</li>
         </ul>
       </nav>
       <p class="welcome-text">
