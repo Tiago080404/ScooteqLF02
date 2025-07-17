@@ -3,13 +3,14 @@ import {
   authUser,
   userLogin,
   checkCurrentLoggedInUser,
+  updateRole,
 } from "../controllers/users.js";
 import { changeStatus, getAllScooters } from "../controllers/scooters.js";
 import express from "express";
 
 const router = express.Router();
 
-//get everthing
+//get everything
 router.get("/", getAllUsers);
 
 //scooters
@@ -20,4 +21,5 @@ router.patch("/scooter", changeStatus);
 router.post("/auth", authUser);
 router.post("/login", userLogin);
 router.get("/auth", checkCurrentLoggedInUser);
+router.patch("/users/:username", updateRole);
 export default router;

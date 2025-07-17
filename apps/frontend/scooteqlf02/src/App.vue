@@ -3,19 +3,28 @@ import L from "leaflet";
 import OpenMap from "./components/OpenMap.vue";
 import AddScooterInput from "./components/AddScooterInput.vue";
 import LoginPage from "./components/LoginPage.vue";
+import AdminConsole from "./components/AdminConsole.vue";
 export default {
   components: {
     OpenMap,
     AddScooterInput,
     LoginPage,
+    AdminConsole,
   },
   data() {
     return {
       openModal: false,
       isAuthenticated: false,
+      showAdmin: false,
     };
   },
   methods: {
+    openAdminConsole() {
+      this.showAdmin = true;
+    },
+    closeAdminConsole() {
+      this.showAdmin = false;
+    },
     callInputMask() {
       this.openModal = !this.openModal;
     },
@@ -63,7 +72,11 @@ export default {
           <li>🛴 Scooters</li>
           <li>⚙️ Settings</li>
           <li @click="logout">🔒 Logout</li>
-          <li v-if="$auth.user.role === 'Admin'">⚙️ Admin Settings</li>
+          <li v-if="$auth.user.role === 'Admin'" @click="openAdminConsole">
+            🛠️ Admin
+          </li>
+
+          <AdminConsole v-if="showAdmin" @close="closeAdminConsole" />
         </ul>
       </nav>
       <p class="welcome-text">

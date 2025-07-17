@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { authenticateToken } from "./src/controllers/users.js";
+import { getAllUsers } from "./src/controllers/users.js";
 
 const app = express();
 
@@ -16,7 +17,11 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
+app.use("/users", getAllUsers);
+
 dotenv.config();
 app.use(["/scooter", "/"], authenticateToken);
 app.use(router);
-app.listen(port);
+app.listen(8080, () => {
+  console.log("✅ Server läuft auf http://localhost:8080");
+});

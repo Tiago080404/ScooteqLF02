@@ -1,11 +1,42 @@
 import pool from "../db/pool.js";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
+
 export async function getAllUsers(req, res) {
-  const query = "SELECT * FROM USERS";
-  const result = await pool.query(query);
-  console.log("Users:", result.rows);
-  res.send(result.rows);
+  try {
+    const result = await pool.query("SELECT * FROM USERS");
+    console.log("Users:", result.rows);
+    res.send(result.rows);
+  } catch (err) {
+    console.error("DB Error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+}
+
+export async function updateRole(req, res) {
+  const { username } = req.params;
+  const { role } = req.body;
+
+  const validRoles = ["Admin", "Viewer", "Techniker"];
+  if (!validRoles.includes(role)) {
+    return res.status(400).json({ message: "Ungültige Rolle." });
+  }
+
+  try {
+    const result = await pool.query(
+      "UPDATE users SET role = $1 WHERE username = $2 RETURNING username, role",
+      [role, username]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Benutzer nicht gefunden." });
+    }
+
+    res.json(result.rows[0]); // { username, role }
+  } catch (error) {
+    console.error("Fehler beim Aktualisieren der Rolle:", error);
+    res.status(500).json({ message: "Datenbankfehler", error: error.message });
+  }
 }
 
 export async function authUser(req, res) {
