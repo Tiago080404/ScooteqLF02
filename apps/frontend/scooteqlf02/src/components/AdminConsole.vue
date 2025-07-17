@@ -60,8 +60,8 @@ export default {
       <button class="close-btn" @click="$emit('close')">✖</button>
       <div class="admin-console">
         <h1>🔑 Admin Console</h1>
-        <p>Users: {{ users.length }}</p>
-        <p>User Management and System Settings</p>
+        <p style="color: black">User Count: {{ users.length }}</p>
+        <p style="color: black">User Management and System Settings</p>
 
         <div class="admin-actions">
           <button class="refresh-btn" @click="fetchUsers">
