@@ -21,5 +21,7 @@ router.patch("/scooter", changeStatus);
 router.post("/auth", authUser);
 router.post("/login", userLogin);
 router.get("/auth", checkCurrentLoggedInUser);
+
 router.patch("/users/:username", updateRole);
+router.get("/users", getAllUsers);
 export default router;
