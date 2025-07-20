@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { authenticateToken } from "./src/controllers/users.js";
+import morgan from "morgan";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
 
