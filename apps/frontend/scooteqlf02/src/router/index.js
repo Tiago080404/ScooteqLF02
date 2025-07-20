@@ -1,10 +1,15 @@
 import { createRouter, createWebHistory } from "vue-router";
 import AdminConsole from "../components/AdminConsole.vue";
+import Home from "../views/Home.vue";
+import Dashboard from "../components/Dashboard.vue";
 const routes = [
   {
-    path: "/admin",
-    name: "AdminConsole",
-    component: AdminConsole,
+    path: "/",
+    component: Home,
+  },
+  {
+    path: "/dashboard",
+    component: Dashboard,
   },
 ];
 

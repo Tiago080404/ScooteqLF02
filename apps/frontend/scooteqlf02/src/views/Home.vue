@@ -1,11 +1,9 @@
 <script>
-import { RouterView } from "vue-router";
+import OpenMap from "../components/OpenMap.vue";
+import AddScooterInput from "../components/AddScooterInput.vue";
+import LoginPage from "../components/LoginPage.vue";
+import AdminConsole from "../components/AdminConsole.vue";
 
-/* import L from "leaflet";
-import OpenMap from "./components/OpenMap.vue";
-import AddScooterInput from "./components/AddScooterInput.vue";
-import LoginPage from "./components/LoginPage.vue";
-import AdminConsole from "./components/AdminConsole.vue";
 export default {
   components: {
     OpenMap,
@@ -61,25 +59,35 @@ export default {
   created() {
     this.checkAuthentication();
   },
-}; */
+};
 </script>
+
 <template>
-  <!--  <div class="app-container" v-if="this.isAuthenticated">
+  <div class="app-container" v-if="isAuthenticated">
     <aside class="sidebar">
       <h2 class="sidebar-title">👷 TECH DASH</h2>
       <nav>
         <ul class="nav-list">
-          <li>🏠 Dashboard</li>
-          <li>🗺️ Map</li>
+          <li>
+            <router-link to="/dashboard" tag="li" style="text-decoration: none"
+              >🏠 Dashboard</router-link
+            >
+          </li>
+
+          <li>
+            <router-link to="/" tag="li" style="text-decoration: none"
+              >🗺️ Map</router-link
+            >
+          </li>
+
           <li>🛴 Scooters</li>
           <li>⚙️ Settings</li>
           <li @click="logout">🔒 Logout</li>
           <li v-if="$auth.user.role === 'Admin'" @click="openAdminConsole">
             🛠️ Admin
           </li>
-
-          <AdminConsole v-if="showAdmin" @close="closeAdminConsole" />
         </ul>
+        <AdminConsole v-if="showAdmin" @close="closeAdminConsole" />
       </nav>
       <p class="welcome-text">
         Welcome, {{ $auth.user.username.toUpperCase() }}
@@ -91,11 +99,12 @@ export default {
       <AddScooterInput v-if="openModal" @close="callInputMask" />
     </main>
   </div>
+
   <div v-else>
     <LoginPage @authenticated="authTry" />
-  </div> -->
-  <RouterView></RouterView>
+  </div>
 </template>
+
 <style scoped>
 .app-container {
   display: flex;
